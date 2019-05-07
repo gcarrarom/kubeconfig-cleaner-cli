@@ -1,2 +1,2 @@
-# kubeconfig-cleaner-cli
-CLI to clean kubeconfig file
+# kubeconfig-cleaner
+I want to clean my kube config file without having to open my config file ever again :)
