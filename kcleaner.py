@@ -1,9 +1,13 @@
 #!/usr/bin/env python3.7
+import os
+import logging
 import click
 import yaml
 from pathlib import Path
 from iterfzf import iterfzf
 
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def ask_yn(yn_question, default='n'):
     tries = 0
@@ -18,6 +22,7 @@ def ask_yn(yn_question, default='n'):
     return response
 
 def update_file(filename, yamldoc):
+    test_file_exists(filename)
     with open(filename, 'w') as stream:
         try:
             yaml.dump(yamldoc, stream)
@@ -25,12 +30,23 @@ def update_file(filename, yamldoc):
             print(exc)
 
 def get_file(filename):
+    test_file_exists(filename)
     with open(filename, 'r') as stream:
         try:
             config_file = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
     return config_file
+
+def test_file_exists(filename):
+    logging.debug("checking if file {filename} exists...")
+    exists = os.path.isfile(filename)
+    if exists:
+        logging.debug("File exists!")
+    else:
+        print('Config File Not found!')
+        # Keep presets
+        exit(10)
 
 def remove_resource(config_file, removing_type):
     resources_name_list = []
@@ -60,8 +76,8 @@ def remove_resource(config_file, removing_type):
 
 
 @click.command()
-@click.option('--module', type=click.Choice(['user', 'cluster', 'context']), default='cluster')
-@click.option('--kubeconfig', default=f'{Path.home()}/.kube/config')
+@click.option('--module', '-m', type=click.Choice(['user', 'cluster', 'context']), default='cluster')
+@click.option('--kubeconfig', '-k', default=f'{Path.home()}/.kube/config')
 @click.option(
     '--name', '-n',
     help='Name of the entry to remove',
@@ -70,6 +86,7 @@ def main(module, name, kubeconfig):
     """
     A little CLI tool to help keeping our Config Files clean :)
     """
+
     config_file = get_file(kubeconfig)
 
     if module == 'cluster':
