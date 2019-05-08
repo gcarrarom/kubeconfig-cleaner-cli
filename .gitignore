@@ -1,1 +1,5 @@
 config
+.vscode/**
+kubeconfig_cleaner.egg-info/**
+venv/**
+__pycache__/**
