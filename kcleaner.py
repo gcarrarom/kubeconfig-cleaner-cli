@@ -5,7 +5,6 @@ import click
 import yaml
 from pathlib import Path
 from iterfzf import iterfzf
-from __future__ import print_function
 
 def ask_yn(yn_question, default='n'):
     tries = 0
