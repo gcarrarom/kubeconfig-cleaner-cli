@@ -12,7 +12,7 @@ def test_clean_non_existant_file():
 
 def test_clean_empty_file():
     with runner.isolated_filesystem():
-        with open('config', 'w') as f:
+        with open('./config', 'w') as f:
             f.write('')
 
         result = runner.invoke(main, ['-k', './config'])
@@ -21,9 +21,9 @@ def test_clean_empty_file():
 
 def test_non_valid_yaml():
     with runner.isolated_filesystem():
-        with open('config', 'w') as f:
-            f.write('{"name":"randomJson"}')
+        with open('./config', 'w') as f:
+            f.write('lololol')
 
         result = runner.invoke(main, ['-k', './config'])
-        assert result.exit_code == 11
+        assert result.exit_code == 12
         assert "Config File is not a valid yaml file!" in result.output

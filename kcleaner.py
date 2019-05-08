@@ -6,9 +6,6 @@ import yaml
 from pathlib import Path
 from iterfzf import iterfzf
 
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
 def ask_yn(yn_question, default='n'):
     tries = 0
     while True:
@@ -30,16 +27,25 @@ def update_file(filename, yamldoc):
             print(exc)
 
 def get_file(filename):
+    logging.debug(f'Trying to retrieve contents of file {filename}')
     test_file_exists(filename)
     with open(filename, 'r') as stream:
         try:
             config_file = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
+    logging.debug(f'File Contents\n{config_file}')
+    logging.debug(f'Type of the file contents:\n{type(config_file)}')
+    if config_file == None:
+        print("Config File is empty! Can't use it.")
+        exit(11)
+    elif type(config_file) == str:
+        print("Config File is not a valid yaml file!")
+        exit(12)
     return config_file
 
 def test_file_exists(filename):
-    logging.debug("checking if file {filename} exists...")
+    logging.debug(f"checking if file {filename} exists...")
     exists = os.path.isfile(filename)
     if exists:
         logging.debug("File exists!")
@@ -86,6 +92,13 @@ def main(module, name, kubeconfig):
     """
     A little CLI tool to help keeping our Config Files clean :)
     """
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.debug(f'Using module {module}')
+    logging.debug(f'Config file to use: {kubeconfig}')
+    if name == None:
+        logging.debug(f'Name is empty, using fzf to search for the resource to remove')
+    else:
+        logging.debug(f'Name of the resource requested to remove: {name}')
 
     config_file = get_file(kubeconfig)
 
@@ -100,3 +113,6 @@ def main(module, name, kubeconfig):
     
 
     update_file("./config", kubeconfig)
+
+if __name__ == '__main__':
+    main()
