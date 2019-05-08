@@ -27,3 +27,4 @@ def test_non_valid_yaml():
         result = runner.invoke(main, ['-k', './config'])
         assert result.exit_code == 12
         assert "Config File is not a valid yaml file!" in result.output
+
