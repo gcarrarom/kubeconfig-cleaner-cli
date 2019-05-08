@@ -61,7 +61,7 @@ def remove_resource(config_file, removing_type):
 
 @click.command()
 @click.option('--module', type=click.Choice(['user', 'cluster', 'context']), default='cluster')
-@click.option('--kubeconfig', default=f'{Path.home()}/Source/kubeconfig-cleaner-cli/config')
+@click.option('--kubeconfig', default=f'{Path.home()}/.kube/config')
 @click.option(
     '--name', '-n',
     help='Name of the entry to remove',
