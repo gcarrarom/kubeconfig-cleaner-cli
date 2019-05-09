@@ -3,3 +3,5 @@ config
 kubeconfig_cleaner.egg-info/**
 venv/**
 __pycache__/**
+.pytest_cache/**
+test
