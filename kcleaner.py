@@ -68,8 +68,9 @@ def remove_resource(config_file, removing_type):
     print(resources_to_remove)
     print(f"{len(config_file[removing_type])} {removing_type} in the end")
 
-    response = ask_yn("Remove Related Resources?")
-    print(f"Your response = {response}")
+    #TODO: Implement cross resource finding
+    #response = ask_yn("Remove Related Resources?")
+    #print(f"Your response = {response}")
 
     try:
         config_file[removing_type] = [item for item in config_file[removing_type] if item['name'] not in resources_to_remove]
