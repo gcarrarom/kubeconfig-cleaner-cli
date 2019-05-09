@@ -41,21 +41,21 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: '*.py'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: '$(Build.SourcesDirectory)/toStage'
     CleanTargetFolder: true
   displayName: 'Copying Python files to the Staging directory'
 
 - task: DeleteFiles@1
   inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+    SourceFolder: '$(Build.SourcesDirectory)/toStage'
     Contents: '*test.py'
   displayName: 'Removing Test Files'
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+    rootFolderOrFile: '$(Build.SourcesDirectory)/toStage'
     includeRootFolder: true
     archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion).$(Build.BuildId).tar.gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildId).tar.gz'
     replaceExistingArchive: true
   displayName: 'Archiving release files to tar.gz file'
