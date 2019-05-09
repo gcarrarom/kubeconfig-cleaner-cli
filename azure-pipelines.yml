@@ -56,7 +56,7 @@ steps:
     rootFolderOrFile: '$(Build.SourcesDirectory)/toStage'
     includeRootFolder: true
     archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildId).tar.gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildNumber).tar.gz'
     replaceExistingArchive: true
   displayName: 'Archiving release files to tar.gz file'
 
