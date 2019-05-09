@@ -1,4 +1,5 @@
 # Python package
+
 # Create and test a Python package on multiple Python versions.
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
@@ -22,6 +23,11 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
+    ApplicationVersion=$(cat setup.py | grep version | cut -d '=' -f 2 | cut -d "'" -f 2)
+    echo "##vso[task.setvariable variable=ApplicationVersion]$ApplicationVersion"
+  displayName: 'Get application Version'
+
+- script: |
     python -m pip install --upgrade pip
     pip install .
   displayName: 'Install dependencies'
@@ -30,3 +36,26 @@ steps:
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '*.py'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+  displayName: 'Copying Python files to the Staging directory'
+
+- task: DeleteFiles@1
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: '*test.py'
+  displayName: 'Removing Test Files'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+    includeRootFolder: true
+    archiveType: 'tar'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion).$(Build.BuildId).tar.gz'
+    replaceExistingArchive: true
+  displayName: 'Archiving release files to tar.gz file'
