@@ -59,3 +59,10 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildId).tar.gz'
     replaceExistingArchive: true
   displayName: 'Archiving release files to tar.gz file'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publishing Artifacts'
