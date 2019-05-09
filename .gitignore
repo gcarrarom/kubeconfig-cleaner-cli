@@ -5,3 +5,4 @@ venv/**
 __pycache__/**
 .pytest_cache/**
 test
+tests/__pycache__/kcleaner_config_file_test.cpython-37-PYTEST.pyc
