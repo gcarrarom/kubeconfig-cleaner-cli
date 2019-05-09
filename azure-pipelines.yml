@@ -30,9 +30,3 @@ steps:
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/*.py'
-    ArtifactName: 'PythonFiles'
-    publishLocation: 'Container'
