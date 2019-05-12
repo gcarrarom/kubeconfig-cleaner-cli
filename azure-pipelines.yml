@@ -45,12 +45,6 @@ steps:
     CleanTargetFolder: true
   displayName: 'Copying Python files to the Staging directory'
 
-- task: DeleteFiles@1
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/toStage'
-    Contents: '*test.py'
-  displayName: 'Removing Test Files'
-
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Build.SourcesDirectory)/toStage'
