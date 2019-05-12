@@ -5,7 +5,7 @@ from  kcleaner import main
 runner = CliRunner()
 def test_clean_non_existant_file():
     
-    results = runner.invoke(main, ['-k', './non_existent_file', '-m', 'context'])
+    results = runner.invoke(main, ['-k', './non_existent_file'])
 
     assert results.exit_code == 10
     assert 'Config File Not found!' in results.output
