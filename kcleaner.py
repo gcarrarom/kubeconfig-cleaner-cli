@@ -20,8 +20,10 @@ def ask_yn(yn_question, default='n'):
 
 def update_file(filename, yamldoc):
     test_file_exists(filename)
+    logging.debug("Opening write stream for file {filename}")
     with open(filename, 'w') as stream:
         try:
+            logging.debug("Dumping new yaml doc into the config file")
             yaml.dump(yamldoc, stream)
         except yaml.YAMLError as exc:
             print(exc)
@@ -35,7 +37,7 @@ def get_file(filename):
         except yaml.YAMLError as exc:
             print(exc)
     logging.debug(f'File Contents\n{config_file}')
-    logging.debug(f'Type of the file contents:\n{type(config_file)}')
+    logging.debug(f'Type of the file contents: {type(config_file)}')
     if config_file == None:
         print("Config File is empty! Can't use it.")
         exit(11)
@@ -55,46 +57,65 @@ def test_file_exists(filename):
         exit(10)
 
 def remove_resource(config_file, removing_type):
+    logging.debug(f"Started removal of {removing_type}")
     resources_name_list = []
+    logging.debug('gathering list of objects for the this resource type')
     for resource in config_file[removing_type]:
         resources_name_list.append(resource['name'])
 
     resources_to_remove = []
+    logging.debug('Prompting for selection')
     resources_to_remove = (iterfzf(resources_name_list, multi=True))
+    logging.debug('List of resources selected: {resources_to_remove}')
     if resources_to_remove == None:
         print("No resources to remove selected!")
         exit()
 
-    print(resources_to_remove)
-    print(f"{len(config_file[removing_type])} {removing_type} in the end")
+    logging.debug(f"{len(config_file[removing_type])} {removing_type} before the removal")
 
     #TODO: Implement cross resource finding
     #response = ask_yn("Remove Related Resources?")
     #print(f"Your response = {response}")
 
     try:
+        logging.debug('Removing resources...')
         config_file[removing_type] = [item for item in config_file[removing_type] if item['name'] not in resources_to_remove]
     except KeyError:
         print(f"Something went wrong!!")
 
-    print(f"{len(config_file[removing_type])} {removing_type} in the end")
+    logging.debug(f"{len(config_file[removing_type])} {removing_type} in the end")
 
     return config_file
 
 
 @click.command()
-@click.option('--module', '-m', type=click.Choice(['user', 'cluster', 'context']), default='cluster')
-@click.option('--kubeconfig', '-k', default=f'{Path.home()}/.kube/config')
+@click.argument(
+    "resource", 
+    type=click.Choice(
+        [
+            'user', 
+            'cluster', 
+            'context', 
+            'users', 
+            'clusters', 
+            'contexts'
+        ]
+    ), 
+    default='clusters'
+)
+@click.option(
+    '--kubeconfig', '-k', default=f'{Path.home()}/.kube/config'
+    )
 @click.option(
     '--name', '-n',
     help='Name of the entry to remove',
 )
-def main(module, name, kubeconfig):
+def main(resource, name, kubeconfig):
     """
-    A little CLI tool to help keeping our Config Files clean :)
+    A little CLI tool to help keeping Config Files clean :)
     """
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    logging.debug(f'Using module {module}')
+    logging.debug(f'Using resource {resource}')
     logging.debug(f'Config file to use: {kubeconfig}')
     if name == None:
         logging.debug(f'Name is empty, using fzf to search for the resource to remove')
@@ -103,17 +124,17 @@ def main(module, name, kubeconfig):
 
     config_file = get_file(kubeconfig)
 
-    if module == 'cluster':
+    if resource == 'cluster':
         removing_type = 'clusters'
-    elif module == 'user':
+    elif resource == 'user':
         removing_type = 'users'
-    elif module == 'context':
+    elif resource == 'context':
         removing_type = 'contexts'
 
     config_file = remove_resource(config_file, removing_type)
     
 
-    update_file("./config", kubeconfig)
+    update_file("./config", config_file)
 
 if __name__ == '__main__':
     main()
