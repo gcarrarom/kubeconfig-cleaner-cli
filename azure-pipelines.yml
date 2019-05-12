@@ -35,7 +35,7 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pytest --junitxml=$(Build.StagingDirectory)/testResults.xml --cov=kcleaner /tests --cov-report=html:cov_html --cov-report=xml:cov.xml
+    pytest --junitxml=$(Build.StagingDirectory)/testResults.xml --cov=kcleaner --cov-report=html:cov_html --cov-report=xml:cov.xml
   displayName: 'pytest'
 
 - task: PublishTestResults@2
