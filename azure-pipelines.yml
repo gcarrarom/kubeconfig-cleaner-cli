@@ -44,15 +44,6 @@ steps:
     testResultsFiles: '$(Build.StagingDirectory)/testResults.xml'
     testRunTitle: Tests
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/htmlcov'
-    additionalCodeCoverageFiles: '$(System.DefaultWorkingDirectory)/htmlcov/**'
-    failIfCoverageEmpty: true
-  displayName: "Publishing Code coverage"
-
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
