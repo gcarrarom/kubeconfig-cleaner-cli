@@ -34,8 +34,23 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pytest
+    pytest --junitxml=$(Build.StagingDirectory)/testResults.xml --cov=kcleaner --cov-report=html --cov-report=xml
   displayName: 'pytest'
+
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    testResultsFiles: '$(Build.StagingDirectory)/testResults.xml'
+    testRunTitle: Tests
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/htmlcov'
+    additionalCodeCoverageFiles: '$(System.DefaultWorkingDirectory)/htmlcov/**'
+    failIfCoverageEmpty: true
+  displayName: "Publishing Code coverage"
 
 - task: CopyFiles@2
   inputs:
