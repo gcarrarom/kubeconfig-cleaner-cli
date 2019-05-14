@@ -59,13 +59,13 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pytest --junitxml=$(Build.StagingDirectory)/testResults.xml --cov=kcleaner --cov-report=html --cov-report=xml
+    pytest --junitxml=$(System.DefaultWorkingDirectory)/testResults.xml --cov=kcleaner --cov-report=html --cov-report=xml
   displayName: 'pytest'
 
 - task: PublishTestResults@2
   displayName: 'Publish test results'
   inputs:
-    testResultsFiles: '$(Build.StagingDirectory)/testResults.xml'
+    testResultsFiles: '$(System.DefaultWorkingDirectory)/testResults.xml'
     testRunTitle: Tests
 
 - task: PublishCodeCoverageResults@1
@@ -90,7 +90,7 @@ steps:
     rootFolderOrFile: '$(Build.SourcesDirectory)/toStage'
     includeRootFolder: true
     archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildNumber).tar.gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion).tar.gz'
     replaceExistingArchive: true
   displayName: 'Archiving release files to tar.gz file'
 
