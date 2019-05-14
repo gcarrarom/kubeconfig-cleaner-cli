@@ -93,9 +93,6 @@ def remove_resource(config_file, removing_type):
     "resource", 
     type=click.Choice(
         [
-            'user', 
-            'cluster', 
-            'context', 
             'users', 
             'clusters', 
             'contexts'
@@ -115,6 +112,8 @@ def main(resource, name, kubeconfig):
     A little CLI tool to help keeping Config Files clean :)
     """
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    if resource == None:
+        resource = "clusters"
     logging.debug(f'Using resource {resource}')
     logging.debug(f'Config file to use: {kubeconfig}')
     if name == None:
@@ -123,15 +122,7 @@ def main(resource, name, kubeconfig):
         logging.debug(f'Name of the resource requested to remove: {name}')
 
     config_file = get_file(kubeconfig)
-
-    if resource == 'cluster':
-        removing_type = 'clusters'
-    elif resource == 'user':
-        removing_type = 'users'
-    elif resource == 'context':
-        removing_type = 'contexts'
-
-    config_file = remove_resource(config_file, removing_type)
+    config_file = remove_resource(config_file, resource)
     
 
     update_file("./config", config_file)
