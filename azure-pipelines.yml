@@ -6,6 +6,8 @@
 
 trigger:
 - master
+- dev/*
+- beta/*
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -23,7 +25,27 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
-    ApplicationVersion=$(cat setup.py | grep version | cut -d '=' -f 2 | cut -d "'" -f 2)
+    branch="$(Build.SourceBranchName)"
+    tags=$(curl https://api.github.com/repos/gcarrarom/kubeconfig-cleaner-cli/tags)
+    if [[ $branch == *"dev"* ]]; then
+      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | cut -d '/' -f 2)\"))] | sort_by(.name) | reverse | .[0].name ")
+      masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
+      devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
+      devVersion=$(echo "$devVersion + 1" | bc)
+      ApplicationVersion="$masterVersion.$devVersion.0"
+    elif [[ $branch == *"beta"* ]]; then
+      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | cut -d '/' -f 2)\"))] | sort_by(.name) | reverse | .[0].name ")
+      masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
+      devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
+      betaVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 3)
+      betaVersion=$(echo "$betaVersion + 1" | bc)
+      ApplicationVersion="$masterVersion.$devVersion.$betaVersion"
+    elif [[ $branch == "master" ]]; then
+      workingOn=$(echo $tags | jq -r "sort_by(.name) | reverse | .[0].name ")
+      version=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
+      newVersion=$(echo "$version + 1" | bc)
+      ApplicationVersion="$version.0.0"
+    fi
     echo "##vso[task.setvariable variable=ApplicationVersion]$ApplicationVersion"
   displayName: 'Get application Version'
 
