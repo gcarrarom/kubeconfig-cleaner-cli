@@ -98,6 +98,14 @@ steps:
     CleanTargetFolder: true
   displayName: 'Copying Python files to the Staging directory'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'README.MD'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/code'
+    CleanTargetFolder: true
+  displayName: 'Copying ReadMe.md file to the Staging directory'
+
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/code'
