@@ -54,6 +54,9 @@ steps:
       echo "Working on Master Version $vesion, increasing..."
       newVersion=$(($version + 1))
       ApplicationVersion="$newVersion.0.0"
+    elif [[ $branch == *"merge"* ]]; then
+      echo "No need to do it properly here :)"
+      ApplicationVersion="0.0.0"
     else
       echo "Invalid Branch!"
       exit 10
