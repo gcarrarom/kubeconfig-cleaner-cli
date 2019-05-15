@@ -1,7 +1,7 @@
 # kcleaner
 ![GitHub release](https://img.shields.io/github/release/gcarrarom/kubeconfig-cleaner-cli.svg)
-[![Build Status](https://dev.azure.com/FancyWhale/KCleaner%20CLI/_apis/build/status/gcarrarom.kubeconfig-cleaner-cli%20(1)?branchName=master)](https://dev.azure.com/FancyWhale/KCleaner%20CLI/_build/latest?definitionId=2&branchName=master)
-	
+[![Master Build Status](https://dev.azure.com/FancyWhale/FancyWhale/_apis/build/status/kcleaner%20CI?branchName=master)](https://dev.azure.com/FancyWhale/FancyWhale/_build/latest?definitionId=2&branchName=master)
+
 I want to clean my kube config file without having to open my config file ever again :)
 
 <p align="center">
