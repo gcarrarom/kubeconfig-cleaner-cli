@@ -81,7 +81,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: '*.py'
-    TargetFolder: '$(Build.SourcesDirectory)/toStage'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/code'
     CleanTargetFolder: true
   displayName: 'Copying Python files to the Staging directory'
 
