@@ -5,7 +5,7 @@
 I want to clean my kube config file without having to open my config file ever again :)
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/gcarrarom/kubeconfig-cleaner-cli/raw/master/render1557878856917.gif">
+  <img src="https://github.com/gcarrarom/kubeconfig-cleaner-cli/raw/master/render1557878856917.gif">
 </p>
 
 # Usage
