@@ -3,6 +3,11 @@
 [![Build Status](https://dev.azure.com/FancyWhale/KCleaner%20CLI/_apis/build/status/gcarrarom.kubeconfig-cleaner-cli%20(1)?branchName=master)](https://dev.azure.com/FancyWhale/KCleaner%20CLI/_build/latest?definitionId=2&branchName=master)
 	
 I want to clean my kube config file without having to open my config file ever again :)
+
+<p align="center">
+  <img width="460" height="300" src="https://github.com/gcarrarom/kubeconfig-cleaner-cli/raw/master/render1557878856917.gif">
+</p>
+
 # Usage
 
 To use this CLI simply type:
