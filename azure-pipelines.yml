@@ -31,7 +31,7 @@ steps:
     echo "working on the $branch branch"
     tags=$(curl https://api.github.com/repos/gcarrarom/kubeconfig-cleaner-cli/tags)
     if [[ $branch == *"dev"* ]]; then
-      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | cut -d '/' -f 2)\"))] | sort_by(.name) | reverse | .[0].name ")
+      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | rev | cut -d '/' -f 1 | rev)\"))] | sort_by(.name) | reverse | .[0].name ")
       masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
       echo "Working on Master Version $masterVersion"
       devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
@@ -39,7 +39,7 @@ steps:
       devVersion=$(($devVersion + 1))
       ApplicationVersion="$masterVersion.$devVersion.0"
     elif [[ $branch == *"beta"* ]]; then
-      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | cut -d '/' -f 2)\"))] | sort_by(.name) | reverse | .[0].name ")
+      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | rev | cut -d '/' -f 1 | rev)\"))] | sort_by(.name) | reverse | .[0].name ")
       masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
       echo "Working on Master Version $masterVersion"
       devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
