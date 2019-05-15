@@ -2,31 +2,6 @@ import click
 from click.testing import CliRunner
 from  kcleaner import main
 
-sample_config = """
-apiVersion: v1
-clusters:
-- cluster:
-    server: https://super.coolcluster.fancywhale.ca
-  name: SuperCoolCluster
-contexts:
-- context:
-    cluster: SuperCoolCluster
-    user: SuperCoolUserName
-  name: SuperCoolContext
-current-context: SuperCoolContext
-kind: Config
-preferences: {}
-users:
-- name: SuperCoolUserName
-  user:
-    auth-provider:
-      config:
-        apiserver-id: some-id-that-makes-sense
-        client-id: some-id-that-makes-sense
-        tenant-id: some-id-that-makes-sense
-      name: some-auth-provider
-"""
-
 runner = CliRunner()
 def test_clean_non_existant_file():
     
