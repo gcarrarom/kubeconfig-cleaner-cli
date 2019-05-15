@@ -1,4 +1,4 @@
-# kubeconfig-cleaner
+# kcleaner
 ![GitHub release](https://img.shields.io/github/release/gcarrarom/kubeconfig-cleaner-cli.svg)
 [![Build Status](https://dev.azure.com/FancyWhale/KCleaner%20CLI/_apis/build/status/gcarrarom.kubeconfig-cleaner-cli%20(1)?branchName=master)](https://dev.azure.com/FancyWhale/KCleaner%20CLI/_build/latest?definitionId=2&branchName=master)
 	
