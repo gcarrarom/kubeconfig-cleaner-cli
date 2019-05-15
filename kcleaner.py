@@ -111,7 +111,7 @@ def main(resource, name, kubeconfig):
     """
     A little CLI tool to help keeping Config Files clean :)
     """
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     if resource == None:
         resource = "clusters"
     logging.debug(f'Using resource {resource}')
@@ -125,8 +125,7 @@ def main(resource, name, kubeconfig):
     config_file = remove_resource(config_file, resource)
     
 
-    update_file("./config", config_file)
+    update_file(kubeconfig, config_file)
 
 if __name__ == '__main__':
     main()
-    
