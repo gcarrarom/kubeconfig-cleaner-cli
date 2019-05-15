@@ -27,7 +27,7 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
-    branch="$(Build.SourceBranchName)"
+    branch="$(Build.SourceBranch)"
     echo "working on the $branch branch"
     tags=$(curl https://api.github.com/repos/gcarrarom/kubeconfig-cleaner-cli/tags)
     if [[ $branch == *"dev"* ]]; then
@@ -54,6 +54,9 @@ steps:
       echo "Working on Master Version $vesion, increasing..."
       newVersion=$(($version + 1))
       ApplicationVersion="$newVersion.0.0"
+    else
+      echo "Invalid Branch!"
+      exit 10
     fi
     echo "Version to be used: $ApplicationVersion"
     echo "##vso[task.setvariable variable=ApplicationVersion]$ApplicationVersion"
