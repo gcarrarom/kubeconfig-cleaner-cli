@@ -98,16 +98,23 @@ steps:
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/toStage'
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/code'
     includeRootFolder: true
     archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildNumber).tar.gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/drop/kcleaner-v$(ApplicationVersion)-$(Build.BuildNumber).tar.gz'
     replaceExistingArchive: true
   displayName: 'Archiving release files to tar.gz file'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-  displayName: 'Publishing Artifacts'
+  displayName: 'Publishing Drop Artifacts'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/code'
+    ArtifactName: 'code'
+    publishLocation: 'Container'
+  displayName: 'Publishing Code Artifacts'
