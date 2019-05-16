@@ -98,7 +98,7 @@ def remove_resource(config_file, removing_type):
             'contexts'
         ]
     ), 
-    default='clusters'
+    default='contexts'
 )
 @click.option(
     '--kubeconfig', '-k', default=f'{Path.home()}/.kube/config'
