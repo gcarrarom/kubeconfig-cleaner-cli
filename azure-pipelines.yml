@@ -8,8 +8,6 @@ trigger:
   branches:
     include:
     - master
-    - beta/*
-    - dev/*
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -27,44 +25,9 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
-    branch="$(Build.SourceBranch)"
-    echo "working on the $branch branch"
-    tags=$(curl https://api.github.com/repos/gcarrarom/kubeconfig-cleaner-cli/tags)
-    if [[ $branch == *"dev"* ]]; then
-      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | rev | cut -d '/' -f 1 | rev)\"))] | sort_by(.name) | reverse | .[0].name ")
-      masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
-      echo "Working on Master Version $masterVersion"
-      devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
-      echo "Working on Dev version $devVersion, increasing..."
-      devVersion=$(($devVersion + 1))
-      ApplicationVersion="$masterVersion.$devVersion.0"
-    elif [[ $branch == *"beta"* ]]; then
-      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | rev | cut -d '/' -f 1 | rev)\"))] | sort_by(.name) | reverse | .[0].name ")
-      masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
-      echo "Working on Master Version $masterVersion"
-      devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
-      echo "Working on Dev version $devVersion"
-      betaVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 3)
-      echo "Working on beta version $devVersion, increasing..."
-      betaVersion=$(($betaVersion + 1))
-      ApplicationVersion="$masterVersion.$devVersion.$betaVersion"
-    elif [[ $branch == "master" ]]; then
-      workingOn=$(echo $tags | jq -r "sort_by(.name) | reverse | .[0].name ")
-      version=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
-      echo "Working on Master Version $vesion, increasing..."
-      newVersion=$(($version + 1))
-      ApplicationVersion="$newVersion.0.0"
-    elif [[ $branch == *"merge"* ]]; then
-      echo "No need to do it properly here :)"
-      ApplicationVersion="0.0.0"
-    else
-      echo "Invalid Branch!"
-      exit 10
-    fi
+    ApplicationVersion=$(cat setup.py | grep version | cut -d '=' -f 2 | cut -d "'" -f 2)
     echo "Version to be used: $ApplicationVersion"
     echo "##vso[task.setvariable variable=ApplicationVersion]$ApplicationVersion"
-    echo "Changing the version of the setup.py file"
-    sed -i -e "s/__VERSION__/$ApplicationVersion/g" "$(Build.SourcesDirectory)/setup.py"
   displayName: 'Get application Version'
 
 - script: |
