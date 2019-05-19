@@ -10,3 +10,4 @@ pytestdebug.log
 tests/__pycache__
 coverage.xml
 htmlcov
+demo.yml

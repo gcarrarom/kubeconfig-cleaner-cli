@@ -8,8 +8,6 @@ trigger:
   branches:
     include:
     - master
-    - beta/*
-    - dev/*
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -27,27 +25,24 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
-    branch="$(Build.SourceBranchName)"
+    echo "Getting version from the setup.py file..."
+    ApplicationVersion=$(cat setup.py | grep version | cut -d '=' -f 2 | cut -d "'" -f 2)
+    echo "setup.py file version: $ApplicationVersion"
+    echo "Testing if this version already exists in GitHub..."
+    echo "Get the tags first..."
     tags=$(curl https://api.github.com/repos/gcarrarom/kubeconfig-cleaner-cli/tags)
-    if [[ $branch == *"dev"* ]]; then
-      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | cut -d '/' -f 2)\"))] | sort_by(.name) | reverse | .[0].name ")
-      masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
-      devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
-      devVersion=$(($devVersion + 1))
-      ApplicationVersion="$masterVersion.$devVersion.0"
-    elif [[ $branch == *"beta"* ]]; then
-      workingOn=$(echo $tags | jq -r "[.[] | select(.name | contains(\"$(echo $branch | cut -d '/' -f 2)\"))] | sort_by(.name) | reverse | .[0].name ")
-      masterVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
-      devVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 2)
-      betaVersion=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 3)
-      betaVersion=$(($betaVersion + 1))
-      ApplicationVersion="$masterVersion.$devVersion.$betaVersion"
-    elif [[ $branch == "master" ]]; then
-      workingOn=$(echo $tags | jq -r "sort_by(.name) | reverse | .[0].name ")
-      version=$(echo $workingOn | cut -d 'v' -f 2 | cut -d '.' -f 1)
-      newVersion=$(($version + 1))
-      ApplicationVersion="$newVersion.0.0"
+
+    echo "check if there's a match on the version.."
+    Match=$(echo $tags | jq -r ".[] | select(.name == \"v$ApplicationVersion\")")
+    
+    if [[ -z "$Match" ]]; then
+      echo "All good, this doesn't match any old versions"
+    else
+      echo "Nope, we have this already... try choosing another one ;)"
+      exit 100
     fi
+
+    echo "Version to be used: $ApplicationVersion"
     echo "##vso[task.setvariable variable=ApplicationVersion]$ApplicationVersion"
   displayName: 'Get application Version'
 
@@ -85,18 +80,33 @@ steps:
     CleanTargetFolder: true
   displayName: 'Copying Python files to the Staging directory'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'README.MD'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/code'
+    CleanTargetFolder: true
+  displayName: 'Copying ReadMe.md file to the Staging directory'
+
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/toStage'
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/code'
     includeRootFolder: true
     archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/kcleaner-v$(ApplicationVersion)-$(Build.BuildNumber).tar.gz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/drop/kcleaner-v$(ApplicationVersion)-$(Build.BuildNumber).tar.gz'
     replaceExistingArchive: true
   displayName: 'Archiving release files to tar.gz file'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-  displayName: 'Publishing Artifacts'
+  displayName: 'Publishing Drop Artifacts'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/code'
+    ArtifactName: 'code'
+    publishLocation: 'Container'
+  displayName: 'Publishing Code Artifacts'

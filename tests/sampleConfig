@@ -3,16 +3,117 @@ clusters:
 - cluster:
     server: https://super.coolcluster.fancywhale.ca
   name: SuperCoolCluster
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster2
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster3
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster4
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster5
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster6
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster7
+- cluster:
+    server: https://super.coolcluster.fancywhale.ca
+  name: SuperCoolCluster8
 contexts:
 - context:
     cluster: SuperCoolCluster
     user: SuperCoolUserName
-  name: SuperCoolContext
+  name: SuperCoolContext1
+- context:
+    cluster: SuperCoolCluster
+    user: SuperCoolUserName
+  name: SuperCoolContext2
+- context:
+    cluster: SuperCoolCluster
+    user: SuperCoolUserName
+  name: SuperCoolContext3
+- context:
+    cluster: SuperCoolCluster
+    user: SuperCoolUserName
+  name: SuperCoolContext4
+- context:
+    cluster: SuperCoolCluster
+    user: SuperCoolUserName
+  name: SuperCoolContext5
+- context:
+    cluster: SuperCoolCluster
+    user: SuperCoolUserName
+  name: SuperCoolContext6
+- context:
+    cluster: SuperCoolCluster
+    user: SuperCoolUserName
+  name: SuperCoolContext7
 current-context: SuperCoolContext
 kind: Config
 preferences: {}
 users:
-- name: SuperCoolUserName
+- name: SuperCoolUserName1
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName2
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName3
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName4
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName5
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName6
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName7
+  user:
+    auth-provider:
+      config:
+        apiserver-id: some-id-that-makes-sense
+        client-id: some-id-that-makes-sense
+        tenant-id: some-id-that-makes-sense
+      name: some-auth-provider
+- name: SuperCoolUserName8
   user:
     auth-provider:
       config:
