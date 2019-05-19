@@ -88,7 +88,7 @@ def remove_resource(config_file, removing_type):
     return config_file
 
 
-@click.group()
+@click.group(invoke_without_command=True)
 @click.option('--kubeconfig', '-k', default=f'{Path.home()}/.kube/config', help="Path to the config file to clean")
 @click.pass_context
 def cli(ctx, kubeconfig):
@@ -99,13 +99,13 @@ def cli(ctx, kubeconfig):
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     logging.debug(f'Config file to use: {kubeconfig}')
     ctx.obj['KUBE_CONFIG']=kubeconfig
+    ctx.obj['CONFIG_FILE'] = get_file(ctx.obj['KUBE_CONFIG'])
 
 @cli.command('contexts')
 @click.option('--name', '-n', help='Name of the context to remove')
 @click.pass_context
 def contexts(ctx, name):
-    config_file = get_file(ctx.obj['KUBE_CONFIG'])
-    config_file = remove_resource(config_file, "contexts")
+    config_file = remove_resource(ctx.obj['CONFIG_FILE'], "contexts")
 
     update_file(ctx.obj['KUBE_CONFIG'], config_file)
 
@@ -114,8 +114,8 @@ def contexts(ctx, name):
 @click.pass_context
 def clusters(ctx, name):
     resource = "clusters"
-    config_file = get_file(ctx.obj['KUBE_CONFIG'])
-    config_file = remove_resource(config_file, resource)
+
+    config_file = remove_resource(ctx.obj['CONFIG_FILE'], resource)
 
     update_file(ctx.obj['KUBE_CONFIG'], config_file)
 
@@ -124,10 +124,10 @@ def clusters(ctx, name):
 @click.pass_context
 def users(ctx, name):
     resource = "users"
-    config_file = get_file(ctx.obj['KUBE_CONFIG'])
-    config_file = remove_resource(config_file, resource)
+    
+    config_file = remove_resource(ctx.obj['CONFIG_FILE'], resource)
 
     update_file(ctx.obj['KUBE_CONFIG'], config_file)
 
 if __name__ == '__main__':
-    cli(obj={})
+    cli()
