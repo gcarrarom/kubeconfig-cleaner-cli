@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='kcleaner',
-    version='__VERSION__',
+    version='0.1.0',
     author='Gui Martins',
     url='https://fancywhale.ca/',
     author_email='gui.martins.94@outlook.com',
