@@ -88,44 +88,46 @@ def remove_resource(config_file, removing_type):
     return config_file
 
 
-@click.command()
-@click.argument(
-    "resource", 
-    type=click.Choice(
-        [
-            'users', 
-            'clusters', 
-            'contexts'
-        ]
-    ), 
-    default='contexts'
-)
-@click.option(
-    '--kubeconfig', '-k', default=f'{Path.home()}/.kube/config'
-    )
-@click.option(
-    '--name', '-n',
-    help='Name of the entry to remove',
-)
-def main(resource, name, kubeconfig):
+@click.group()
+@click.option('--kubeconfig', '-k', default=f'{Path.home()}/.kube/config', help="Path to the config file to clean")
+@click.pass_context
+def cli(ctx, kubeconfig):
     """
-    A little CLI tool to help keeping Config Files clean :)
+    A little CLI tool to help keeping Config Files clean.
     """
+    ctx.ensure_object(dict)
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    if resource == None:
-        resource = "clusters"
-    logging.debug(f'Using resource {resource}')
     logging.debug(f'Config file to use: {kubeconfig}')
-    if name == None:
-        logging.debug(f'Name is empty, using fzf to search for the resource to remove')
-    else:
-        logging.debug(f'Name of the resource requested to remove: {name}')
+    ctx.obj['KUBE_CONFIG']=kubeconfig
 
-    config_file = get_file(kubeconfig)
+@cli.command('contexts')
+@click.option('--name', '-n', help='Name of the context to remove')
+@click.pass_context
+def contexts(ctx, name):
+    config_file = get_file(ctx.obj['KUBE_CONFIG'])
+    config_file = remove_resource(config_file, "contexts")
+
+    update_file(ctx.obj['KUBE_CONFIG'], config_file)
+
+@cli.command('clusters')
+@click.option('--name', '-n', help='Name of the cluster to remove')
+@click.pass_context
+def clusters(ctx, name):
+    resource = "clusters"
+    config_file = get_file(ctx.obj['KUBE_CONFIG'])
     config_file = remove_resource(config_file, resource)
-    
 
-    update_file(kubeconfig, config_file)
+    update_file(ctx.obj['KUBE_CONFIG'], config_file)
+
+@cli.command('users')
+@click.option('--name', '-n', help='Name of the user to remove')
+@click.pass_context
+def users(ctx, name):
+    resource = "users"
+    config_file = get_file(ctx.obj['KUBE_CONFIG'])
+    config_file = remove_resource(config_file, resource)
+
+    update_file(ctx.obj['KUBE_CONFIG'], config_file)
 
 if __name__ == '__main__':
-    main()
+    cli(obj={})
