@@ -1,5 +1,5 @@
 import click
 from click.testing import CliRunner
-from  kcleaner import main
+from  kcleaner import cli
 
 runner = CliRunner()

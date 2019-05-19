@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='kcleaner',
-    version='0.1.0',
+    version='0.1.1',
     author='Gui Martins',
     url='https://fancywhale.ca/',
     author_email='gui.martins.94@outlook.com',
@@ -16,6 +16,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        kcleaner=kcleaner:main
+        kcleaner=kcleaner:cli
     ''',
 )
