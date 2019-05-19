@@ -13,8 +13,9 @@ I want to clean my kube config file without having to open my config file ever a
 To use this CLI simply type:
 `kcleaner`
 This will prompt you to remove the context by using Fuzzy Search.
-If you want to clean another kube config file, you should use the option `-k` or `--kube-config` with the path for your config file
-if you want to remove clusters, you can too! Just call `kcleaner clusters` and voilá!
+If you want to clean another kube config file, you should use the option `-k` or `--kube-config` with the path for your config file.
+If you want to remove clusters, you can too! Just call `kcleaner clusters` and voilá!
+What about users? Sure can! `kcleaner users` is here to help!
 To select more than one entry, just press tab. All the selected entries will be removed!
 
 If you know the name of the config entry you're going to remove, you can always use the `-n` or `--name` option to remove it.
