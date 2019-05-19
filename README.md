@@ -30,4 +30,4 @@ If you know the name of the config entry you're going to remove, you can always 
   - [ ] Automated release to Brew
   - [ ] Automated release to Chocolatey
 - [ ] Add more tests, Code coverage is laughable now ;)
-- [ ] Add undo flag... Life happens ¯\\_(ツ)_/¯
+- [ ] Add undo flag... Life happens ¯\\\_(ツ)\_/¯
