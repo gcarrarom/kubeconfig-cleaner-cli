@@ -30,4 +30,4 @@ If you know the name of the config entry you're going to remove, you can always 
   [] 3.2. Automated release to PyPI
   [] 3.3. Automated release to Brew
   [] 3.4. Automated release to Chocolatey
-[] 4. Add undo flag... Shit happens ¯\\_(ツ)_/¯
+[] 4. Add undo flag... Shit happens ¯\_(ツ)_/¯
