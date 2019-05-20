@@ -23,7 +23,6 @@ If you know the name of the config entry you're going to remove, you can always 
 
 # TO-DO:
 
-- [x] Make it easier to add changes and modules to the tool - Changed to use command group instead
 - [ ] Automated publishing to PyPI, Brew and Chocolatey
   - [x] Automated release to PyPI Test
   - [ ] Automated release to PyPI
@@ -31,3 +30,4 @@ If you know the name of the config entry you're going to remove, you can always 
   - [ ] Automated release to Chocolatey
 - [ ] Add more tests, Code coverage is laughable now ;)
 - [ ] Add undo flag... Life happens ¯\\\_(ツ)\_/¯
+- [x] ~~Make it easier to add changes and modules to the tool - Changed to use command group instead~~ Not worth it.
