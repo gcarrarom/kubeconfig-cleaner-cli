@@ -120,6 +120,7 @@ def cli(resource, name, kubeconfig, undo):
     if undo:
         logging.debug(f"Undo flag was set! checking for the backup file...")
         kubeconfig_backup = f"{kubeconfig}.bak"
+        print(f'Searching for backup config file {kubeconfig_backup}')
         config_file = get_file(kubeconfig_backup)
     else:
         config_file = get_file(kubeconfig)
