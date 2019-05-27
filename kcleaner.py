@@ -108,7 +108,7 @@ def remove_resource(config_file, removing_type):
     help='Name of the entry to remove',
 )
 @click.option(
-    '-u', '--undo',
+    '--undo', '-u',
     help='Use this to roll back latest changes',
     is_flag=True
 )
