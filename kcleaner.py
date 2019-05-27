@@ -112,21 +112,25 @@ def remove_resource(config_file, removing_type):
     help='Use this to roll back latest changes',
     is_flag=True
 )
-def cli(resource, name, kubeconfig):
+def cli(resource, name, kubeconfig, undo):
     """
     A little CLI tool to help keeping Config Files clean :)
     """
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    if undo:
+        logging.debug(f"Undo flag was set! checking for the backup file...")
+        kubeconfig_backup = f"{kubeconfig}.bak"
+        config_file = get_file(kubeconfig_backup)
+    else:
+        config_file = get_file(kubeconfig)
+        config_file = remove_resource(config_file, resource)
+        
     logging.debug(f'Using resource {resource}')
     logging.debug(f'Config file to use: {kubeconfig}')
     if name == None:
         logging.debug(f'Name is empty, using fzf to search for the resource to remove')
     else:
         logging.debug(f'Name of the resource requested to remove: {name}')
-
-    config_file = get_file(kubeconfig)
-    config_file = remove_resource(config_file, resource)
-    
 
     update_file(kubeconfig, config_file)
 
