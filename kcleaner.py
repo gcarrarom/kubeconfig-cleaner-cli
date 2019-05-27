@@ -117,8 +117,6 @@ def cli(resource, name, kubeconfig):
     A little CLI tool to help keeping Config Files clean :)
     """
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    if resource == None:
-        resource = "clusters"
     logging.debug(f'Using resource {resource}')
     logging.debug(f'Config file to use: {kubeconfig}')
     if name == None:
