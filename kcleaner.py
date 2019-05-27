@@ -117,13 +117,16 @@ def cli(resource, name, kubeconfig, undo):
     A little CLI tool to help keeping Config Files clean :)
     """
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    kubeconfig_backup = f"{kubeconfig}.bak"
+
     if undo:
         logging.debug(f"Undo flag was set! checking for the backup file...")
-        kubeconfig_backup = f"{kubeconfig}.bak"
         print(f'Searching for backup config file {kubeconfig_backup}')
         config_file = get_file(kubeconfig_backup)
     else:
         config_file = get_file(kubeconfig)
+        logging.debug(f'Backing up config file at {kubeconfig_backup} before doing anything')
+        update_file(kubeconfig_backup, config_file)
         config_file = remove_resource(config_file, resource)
         
     logging.debug(f'Using resource {resource}')
