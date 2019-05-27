@@ -107,6 +107,11 @@ def remove_resource(config_file, removing_type):
     '--name', '-n',
     help='Name of the entry to remove',
 )
+@click.option(
+    '-u', '--undo',
+    help='Use this to roll back latest changes',
+    is_flag=True
+)
 def cli(resource, name, kubeconfig):
     """
     A little CLI tool to help keeping Config Files clean :)
