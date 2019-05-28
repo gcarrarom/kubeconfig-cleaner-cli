@@ -37,10 +37,6 @@ def check_and_cleanup_backups(filename):
             logging.debug(f"Removing File {file}")
             os.remove(f"{dirpath}/{file}")
 
-
-
-
-
 def update_file(filename, yamldoc):
     test_file_exists(filename)
     if not test_file_exists(filename) and not "bak" in filename:
@@ -84,6 +80,17 @@ def test_file_exists(filename):
         logging.info('Config File Not found!')
         # Keep presets
     return exists
+
+def get_backup(backup_path):
+    logging.debug(f"Checking all backups available in the directory {backup_path}")
+    files = os.listdir(backup_path)
+    logging.debug(f"These are all the files in the directory:\n{files}")
+    logging.debug(f"Checking for all kcleaner backup files")
+    files = [item for item in files if "kcleaner.bak" in item]
+    logging.debug(f"These are the backup files in this folder:\n{files}")
+    backup_to_use = iterfzf(files)
+    return get_file(f"{backup_path}/{backup_to_use}")
+
 
 def remove_resource(config_file, removing_type):
     logging.debug(f"Started removal of {removing_type}")
@@ -161,7 +168,7 @@ def cli(resource, name, kubeconfig, undo, debug):
     if undo:
         logging.info(f"Undo flag was set! checking for the backup file...")
         logging.info(f'Searching for backup config file {kubeconfig_backup}')
-        config_file_after = get_file(kubeconfig_backup)
+        config_file_after = get_backup(kubeconfig_dir)
     else:
         config_file_before = get_file(kubeconfig)
         update_file(kubeconfig_backup, config_file_before)
