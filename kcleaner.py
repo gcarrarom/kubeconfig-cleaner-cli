@@ -20,17 +20,21 @@ def ask_yn(yn_question, default='n'):
 
 def update_file(filename, yamldoc):
     test_file_exists(filename)
-    logging.debug("Opening write stream for file {filename}")
+    if not test_file_exists(filename) and not "bak" in filename:
+        logging.error("Cannot work with an empty file!, please check the path of your config file.")
+    logging.debug(f"Opening write stream for file {filename}")
     with open(filename, 'w') as stream:
         try:
-            logging.debug("Dumping new yaml doc into the config file")
+            logging.debug("Writing new yaml doc into the config file")
             yaml.dump(yamldoc, stream)
         except yaml.YAMLError as exc:
             logging.exception("Exception occured while trying to write Yaml file")
 
 def get_file(filename):
     logging.debug(f'Trying to retrieve contents of file {filename}')
-    test_file_exists(filename)
+    if not test_file_exists(filename):
+        logging.error("Cannot work with an empty file!, please check the path of your config file.")
+        exit(10)
     with open(filename, 'r') as stream:
         try:
             config_file = yaml.safe_load(stream)
@@ -52,9 +56,9 @@ def test_file_exists(filename):
     if exists:
         logging.debug("File exists!")
     else:
-        logging.error('Config File Not found!')
+        logging.info('Config File Not found!')
         # Keep presets
-        exit(10)
+    return exists
 
 def remove_resource(config_file, removing_type):
     logging.debug(f"Started removal of {removing_type}")
@@ -86,9 +90,6 @@ def remove_resource(config_file, removing_type):
     logging.debug(f"{len(config_file[removing_type])} {removing_type} in the end")
 
     return config_file
-
-def write_file(filename, yamldoc):
-    logging.info("Not Implemented Yet")
 
 @click.command()
 @click.argument(
@@ -133,22 +134,23 @@ def cli(resource, name, kubeconfig, undo, debug):
 
     if undo:
         logging.info(f"Undo flag was set! checking for the backup file...")
-        print(f'Searching for backup config file {kubeconfig_backup}')
-        config_file = get_file(kubeconfig_backup)
+        logging.info(f'Searching for backup config file {kubeconfig_backup}')
+        config_file_after = get_file(kubeconfig_backup)
     else:
-        config_file = get_file(kubeconfig)
+        config_file_before = get_file(kubeconfig)
+        logging.info(f'Using resource {resource}')
+        logging.debug(f'Config file to use: {kubeconfig}')
+        if name == None:
+            logging.info(f'Name is empty, using fzf to search for the resource to remove')
+        else:
+            logging.info(f'Name of the resource requested to remove: {name}')
+        config_file_after = remove_resource(config_file_before, resource)
         logging.info(f'Backing up config file at {kubeconfig_backup} before doing anything')
-        update_file(kubeconfig_backup, config_file)
-        config_file = remove_resource(config_file, resource)
+        update_file(kubeconfig_backup, config_file_before)
         
-    logging.info(f'Using resource {resource}')
-    logging.debug(f'Config file to use: {kubeconfig}')
-    if name == None:
-        logging.info(f'Name is empty, using fzf to search for the resource to remove')
-    else:
-        logging.info(f'Name of the resource requested to remove: {name}')
 
-    update_file(kubeconfig, config_file)
+    logging.debug(f"New Config file content: \n{config_file_after}")
+    update_file(kubeconfig, config_file_after)
 
 if __name__ == '__main__':
     cli(obj={})
