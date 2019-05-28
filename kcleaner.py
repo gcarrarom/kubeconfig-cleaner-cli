@@ -5,6 +5,9 @@ import click
 import yaml
 from pathlib import Path
 from iterfzf import iterfzf
+import datetime
+
+backup_limit = 10
 
 def ask_yn(yn_question, default='n'):
     tries = 0
@@ -18,10 +21,32 @@ def ask_yn(yn_question, default='n'):
             break
     return response
 
+def check_and_cleanup_backups(filename):
+    logging.debug(f"Checking if there's not more than {backup_limit} backup files in this directory")
+    dirpath = os.path.dirname(os.path.abspath(filename))
+    logging.debug(f"Getting all the files in {dirpath}")
+    files = os.listdir(dirpath)
+    logging.debug(f"These are all the files in the directory:\n{files}")
+    logging.debug(f"Checking for all kcleaner backup files")
+    files = [item for item in files if "kcleaner.bak" in item]
+    logging.debug(f"These are the backup files in this folder:\n{files}")
+    if len(files) > 10:
+        logging.info(f"Cleaning up excess of backup files - we have {len(files)} already... - Removing the {len(files) - 10} oldest files")
+        files.sort()
+        for file in files[0:(len(files)-10)]:
+            logging.debug(f"Removing File {file}")
+            os.remove(f"{dirpath}/{file}")
+
+
+
+
+
 def update_file(filename, yamldoc):
     test_file_exists(filename)
     if not test_file_exists(filename) and not "bak" in filename:
         logging.error("Cannot work with an empty file!, please check the path of your config file.")
+    if "bak" in filename:
+        check_and_cleanup_backups(filename)
     logging.debug(f"Opening write stream for file {filename}")
     with open(filename, 'w') as stream:
         try:
@@ -130,7 +155,8 @@ def cli(resource, name, kubeconfig, undo, debug):
     else:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 
-    kubeconfig_backup = f"{kubeconfig}.bak"
+    kubeconfig_dir = os.path.dirname(os.path.abspath(kubeconfig))
+    kubeconfig_backup = f"{kubeconfig_dir}/{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_kcleaner.bak"
 
     if undo:
         logging.info(f"Undo flag was set! checking for the backup file...")
@@ -138,6 +164,7 @@ def cli(resource, name, kubeconfig, undo, debug):
         config_file_after = get_file(kubeconfig_backup)
     else:
         config_file_before = get_file(kubeconfig)
+        update_file(kubeconfig_backup, config_file_before)
         logging.info(f'Using resource {resource}')
         logging.debug(f'Config file to use: {kubeconfig}')
         if name == None:
@@ -146,7 +173,6 @@ def cli(resource, name, kubeconfig, undo, debug):
             logging.info(f'Name of the resource requested to remove: {name}')
         config_file_after = remove_resource(config_file_before, resource)
         logging.info(f'Backing up config file at {kubeconfig_backup} before doing anything')
-        update_file(kubeconfig_backup, config_file_before)
         
 
     logging.debug(f"New Config file content: \n{config_file_after}")
