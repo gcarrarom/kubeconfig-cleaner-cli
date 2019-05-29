@@ -88,7 +88,7 @@ def get_backup(backup_path):
     logging.debug(f"Checking for all kcleaner backup files")
     files = [item for item in files if "kcleaner.bak" in item]
     logging.debug(f"These are the backup files in this folder:\n{files}")
-    files.sort()
+    files.sort(reverse=True)
     backup_to_use = iterfzf(files)
     return get_file(f"{backup_path}/{backup_to_use}")
 
