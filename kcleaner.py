@@ -44,6 +44,17 @@ def update_file(filename, yamldoc):
         logging.error("Cannot work with an empty file!, please check the path of your config file.")
     if "bak" in filename:
         check_and_cleanup_backups(filename)
+    if yamldoc == None:
+        logging.error("Yaml Value cannot be 'None'!")
+        exit(30)
+    elif yamldoc == "":
+        logging.error("Yaml Value cannot be empty!")
+        exit(31)
+    try:
+        yaml.safe_load(yamldoc)
+    except:
+        logging.exception("Yaml value is not valid!")
+        exit(32)
     logging.debug(f"Opening write stream for file {filename}")
     with open(filename, 'w') as stream:
         try:
@@ -85,7 +96,6 @@ def file_exists(filename):
         logging.debug("File exists!")
     else:
         logging.info('Config File Not found!')
-        # Keep presets
     return exists
 
 def get_backup(backup_path):
