@@ -8,6 +8,7 @@ from iterfzf import iterfzf
 import datetime
 
 backup_limit = 10
+backup_date_format = '%Y-%m-%d_%H-%M-%S'
 
 def ask_yn(yn_question, default='n'):
     tries = 0
@@ -91,10 +92,13 @@ def get_backup(backup_path):
     files.sort(reverse=True)
     dates = []
     for file in files:
-        dates.append((datetime.datetime.strptime("_".join(file.split('_')[0:2]), '%Y-%m-%d_%H-%M-%S').strftime("%c")))
+        dates.append((datetime.datetime.strptime("_".join(file.split('_')[0:2]), backup_date_format).strftime("%c")))
     logging.debug(dates)
     backup_to_use = iterfzf(dates)
-    return get_file(f"{backup_path}/{backup_to_use}")
+    logging.debug(f'Backup chosen: {backup_to_use}')
+    backup_file_to_use = f"{datetime.datetime.strptime(backup_to_use, '%c').strftime(backup_date_format)}_kcleaner.bak"
+    logging.debug(f'Backup file: {backup_file_to_use}')
+    return get_file(f"{backup_path}/{backup_file_to_use}")
 
 
 def remove_resource(config_file, removing_type):
@@ -168,7 +172,7 @@ def cli(resource, name, kubeconfig, undo, debug):
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 
     kubeconfig_dir = os.path.dirname(os.path.abspath(kubeconfig))
-    kubeconfig_backup = f"{kubeconfig_dir}/{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_kcleaner.bak"
+    kubeconfig_backup = f"{kubeconfig_dir}/{datetime.datetime.now().strftime(backup_date_format)}_kcleaner.bak"
 
     if undo:
         logging.info(f"Undo flag was set! checking for the backup file...")
