@@ -89,7 +89,11 @@ def get_backup(backup_path):
     files = [item for item in files if "kcleaner.bak" in item]
     logging.debug(f"These are the backup files in this folder:\n{files}")
     files.sort(reverse=True)
-    backup_to_use = iterfzf(files)
+    dates = []
+    for file in files:
+        dates.append((datetime.datetime.strptime("_".join(file.split('_')[0:2]), '%Y-%m-%d_%H-%M-%S').strftime("%c")))
+    logging.debug(dates)
+    backup_to_use = iterfzf(dates)
     return get_file(f"{backup_path}/{backup_to_use}")
 
 
