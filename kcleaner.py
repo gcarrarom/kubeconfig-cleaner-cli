@@ -39,8 +39,8 @@ def check_and_cleanup_backups(filename):
             os.remove(f"{dirpath}/{file}")
 
 def update_file(filename, yamldoc):
-    test_file_exists(filename)
-    if not test_file_exists(filename) and not "bak" in filename:
+    file_exists(filename)
+    if not file_exists(filename) and not "bak" in filename:
         logging.error("Cannot work with an empty file!, please check the path of your config file.")
     if "bak" in filename:
         check_and_cleanup_backups(filename)
@@ -54,7 +54,7 @@ def update_file(filename, yamldoc):
 
 def get_file(filename):
     logging.debug(f'Trying to retrieve contents of file {filename}')
-    if not test_file_exists(filename):
+    if not file_exists(filename):
         logging.error("Cannot work with an empty file!, please check the path of your config file.")
         exit(10)
     with open(filename, 'r') as stream:
@@ -72,8 +72,14 @@ def get_file(filename):
         exit(12)
     return config_file
 
-def test_file_exists(filename):
+def file_exists(filename):
     logging.debug(f"checking if file {filename} exists...")
+    if filename == None:
+        logging.error("Filename cannot be 'None'")
+        exit(20)
+    elif filename == "":
+        logging.error("Filename cannot be empty!")
+        exit(21)
     exists = os.path.isfile(filename)
     if exists:
         logging.debug("File exists!")
