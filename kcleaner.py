@@ -176,19 +176,19 @@ def cli(resource, name, kubeconfig, undo, debug):
 
     if undo:
         logging.info(f"Undo flag was set! checking for the backup file...")
-        logging.info(f'Searching for backup config file {kubeconfig_backup}')
+        logging.debug(f'Searching for backup config file {kubeconfig_backup}')
         config_file_after = get_backup(kubeconfig_dir)
     else:
         config_file_before = get_file(kubeconfig)
+        logging.debug(f'Backing up config file at {kubeconfig_backup} before doing anything')
         update_file(kubeconfig_backup, config_file_before)
         logging.info(f'Using resource {resource}')
         logging.debug(f'Config file to use: {kubeconfig}')
         if name == None:
-            logging.info(f'Name is empty, using fzf to search for the resource to remove')
+            logging.debug(f'Name is empty, using fzf to search for the resource to remove')
         else:
-            logging.info(f'Name of the resource requested to remove: {name}')
+            logging.debug(f'Name of the resource requested to remove: {name}')
         config_file_after = remove_resource(config_file_before, resource)
-        logging.info(f'Backing up config file at {kubeconfig_backup} before doing anything')
         
 
     logging.debug(f"New Config file content: \n{config_file_after}")
