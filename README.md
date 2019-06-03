@@ -33,9 +33,10 @@ If you know the name of the config entry you're going to remove, you can always 
 There are plenty of ways of installing this tool. Althought I would always recommend to wait for the full release, feel free to download the beta versions as well.
 ## PyPI Test
 This is the first distribution place for the tool, latest version might not be fully operational
-```pip install -i https://test.pypi.org/simple/ kcleaner```
 
-# TO-DO:
+`pip install -i https://test.pypi.org/simple/ kcleaner`
+
+# TO-DO
 
 - [ ] Automated publishing to PyPI, Brew and Chocolatey
   - [x] Automated release to PyPI Test
