@@ -23,6 +23,9 @@ def ask_yn(yn_question, default='n'):
     return response
 
 def check_and_cleanup_backups(filename):
+    if filename == None:
+        logging.error("Filename cannot be 'None'!")
+        exit(40)
     logging.debug(f"Checking if there's not more than {backup_limit} backup files in this directory")
     dirpath = os.path.dirname(os.path.abspath(filename))
     logging.debug(f"Getting all the files in {dirpath}")
@@ -31,12 +34,14 @@ def check_and_cleanup_backups(filename):
     logging.debug(f"Checking for all kcleaner backup files")
     files = [item for item in files if "kcleaner.bak" in item]
     logging.debug(f"These are the backup files in this folder:\n{files}")
-    if len(files) > 10:
-        logging.info(f"Cleaning up excess of backup files - we have {len(files)} already... - Removing the {len(files) - 10} oldest files")
+    if len(files) > backup_limit:
+        logging.info(f"Cleaning up excess of backup files - we have {len(files)} already... - Removing the {len(files) - backup_limit} oldest files")
         files.sort()
-        for file in files[0:(len(files)-10)]:
+        for file in files[0:(len(files)-backup_limit)]:
             logging.debug(f"Removing File {file}")
             os.remove(f"{dirpath}/{file}")
+    else:
+        logging.debug(f'We are bellow the backup limit, nothing to do here.')
 
 def update_file(filename, yamldoc):
     file_exists(filename)
@@ -50,11 +55,15 @@ def update_file(filename, yamldoc):
     elif yamldoc == "":
         logging.error("Yaml Value cannot be empty!")
         exit(31)
-    try:
-        yaml.safe_load(yamldoc)
-    except:
-        logging.exception("Yaml value is not valid!")
-        exit(32)
+    logging.debug(f'Checking the type of the yamldoc: {type(yamldoc)}')
+    if type(yamldoc) is not dict:
+        try:
+            yaml.safe_load(yamldoc)
+        except:
+            logging.exception("Yaml value is not valid!")
+            exit(32)
+    else:
+        logging.debug(f"This is a dict yaml doc object. Should be fine to convert as yaml. Content:\n{yamldoc}")
     logging.debug(f"Opening write stream for file {filename}")
     with open(filename, 'w') as stream:
         try:
@@ -184,6 +193,7 @@ def cli(resource, name, kubeconfig, undo, debug):
     """
     if debug:
         logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.debug('Running with Debug flag')
     else:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 

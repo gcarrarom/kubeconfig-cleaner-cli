@@ -35,6 +35,35 @@ def test_clean_empty_file(capture):
         )
 
 @log_capture()
+def test_clean_empty_file_debug(capture):
+    with runner.isolated_filesystem():
+        with open('./config', 'w') as f:
+            f.write('')
+
+        result = runner.invoke(cli, ['-k', './config', '-d'])
+        assert result.exit_code == 11
+        capture.check_present(
+            ('root', 'DEBUG', 'Running with Debug flag'),
+            ('root', 'DEBUG', 'Trying to retrieve contents of file ./config'),
+            ('root', 'DEBUG', 'checking if file ./config exists...'),
+            ('root', 'DEBUG', 'File exists!'),
+            ('root', 'DEBUG', "Type of the file contents: <class 'NoneType'>"),
+            ('root', 'ERROR', "Config File is empty! Can't use it.")
+        )
+
+@log_capture()
+def test_clean_empty_file_undo(capture):
+    with runner.isolated_filesystem():
+        with open('./config', 'w') as f:
+            f.write('')
+
+        result = runner.invoke(cli, ['-k', './config', '-u'])
+        #assert result.exit_code == 11
+        capture.check_present(
+            ('root', 'INFO', 'Undo flag was set! checking for the backup file...')
+        )
+
+@log_capture()
 def test_non_valid_yaml(capture):
     with runner.isolated_filesystem():
         with open('./config', 'w') as f:

@@ -95,3 +95,18 @@ def test_existant_file_yaml_content(capture):
         capture.check_present(
             ('root', 'DEBUG', 'Writing new yaml doc into the config file')
         )
+
+@log_capture()
+def test_backup_file_yaml_content(capture):
+    with runner.isolated_filesystem():
+        with open('./something_kcleaner.bak', 'w') as f:
+            f.write('lololol')
+        update_file("./something_kcleaner.bak", sample_yaml)
+
+        with open('./something_kcleaner.bak', 'r') as f:
+            result = yaml.safe_load(f)
+
+        assert sample_yaml in result
+        capture.check_present(
+            ('root', 'DEBUG', 'Checking for all kcleaner backup files')
+        )
