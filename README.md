@@ -8,6 +8,12 @@ I want to clean my kube config file without having to open my config file ever a
   <img src="https://github.com/gcarrarom/kubeconfig-cleaner-cli/raw/master/render1557878856917.gif">
 </p>
 
+- [kcleaner](#kcleaner)
+- [Usage](#usage)
+- [Installation](#installation)
+  - [PyPI Test](#pypi-test)
+- [TO-DO:](#to-do)
+
 # Usage
 
 To use this CLI simply type:
@@ -20,6 +26,11 @@ To select more than one entry, just press tab. All the selected entries will be 
 
 If you know the name of the config entry you're going to remove, you can always use the `-n` or `--name` option to remove it.
 
+# Installation
+There are plenty of ways of installing this tool. Althought I would always recommend to wait for the full release, feel free to download the beta versions as well.
+## PyPI Test
+This is the first distribution place for the tool, latest version might not be fully operational
+```pip install -i https://test.pypi.org/simple/ kcleaner```
 
 # TO-DO:
 
