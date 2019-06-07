@@ -136,8 +136,16 @@ def remove_resource(config_file, removing_type):
     logging.debug(f"Started removal of {removing_type}")
     resources_name_list = []
     logging.debug('gathering list of objects for the this resource type')
-    for resource in config_file[removing_type]:
-        resources_name_list.append(resource['name'])
+    if removing_token:
+        for resource in config_file[removing_type]:
+            try:
+                logging.debug(f"{resource['user']['auth-provider']['config']['access-token']}")
+                resources_name_list.append(resource['name'])
+            except:
+                continue
+    else:
+        for resource in config_file[removing_type]:
+            resources_name_list.append(resource['name'])
 
     resources_to_remove = []
     logging.debug('Prompting for selection')
