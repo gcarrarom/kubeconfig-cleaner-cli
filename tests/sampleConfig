@@ -108,14 +108,13 @@ users:
 - name: SuperCoolUserName7
   user:
     auth-provider:
-        auth-provider:
       config:
         access-token: SomeRandomToken
-        expires-in: "3600"
-        expires-on: "1559593884"
-        refresh-token: SomeRandomRefreshToken
         apiserver-id: some-id-that-makes-sense
         client-id: some-id-that-makes-sense
+        expires-in: '3600'
+        expires-on: '1559593884'
+        refresh-token: SomeRandomRefreshToken
         tenant-id: some-id-that-makes-sense
       name: some-auth-provider
 - name: SuperCoolUserName8
