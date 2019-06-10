@@ -70,7 +70,7 @@ def update_file(filename, yamldoc):
             logging.debug("Writing new yaml doc into the config file")
             yaml.dump(yamldoc, stream)
         except yaml.YAMLError as exc:
-            logging.exception("Exception occured while trying to write Yaml file")
+            logging.exception(f"Exception occured while trying to write Yaml file: {exc}")
 
 def get_file(filename):
     logging.debug(f'Trying to retrieve contents of file {filename}')
@@ -81,7 +81,8 @@ def get_file(filename):
         try:
             config_file = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
-            logging.exception("Exception occured while trying to load Yaml file")
+            logging.exception(f"Exception occured while trying to load Yaml file: {exc}")
+            exit(13)
     logging.debug(f'File Contents\n{config_file}')
     logging.debug(f'Type of the file contents: {type(config_file)}')
     if config_file == None:
@@ -127,19 +128,43 @@ def get_backup(backup_path):
 
 
 def remove_resource(config_file, removing_type):
+    if config_file == None:
+        logging.error(f'Config File cannot be "None"!')
+        exit(50)
+    if removing_type == None:
+        logging.error(f'Removing type cannot be "None"!')
+        exit(50)
+
+    if removing_type == "" or config_file == "":
+        logging.error(f'Parameters cannot be empty!')
+        exit(51)
+
+    if removing_type == 'token':
+        removing_type = 'users'
+        removing_token = True
+    else: 
+        removing_token = False
     logging.debug(f"Started removal of {removing_type}")
     resources_name_list = []
     logging.debug('gathering list of objects for the this resource type')
-    for resource in config_file[removing_type]:
-        resources_name_list.append(resource['name'])
+    if removing_token:
+        for resource in config_file[removing_type]:
+            try:
+                logging.debug(f"{resource['user']['auth-provider']['config']['access-token']}")
+                resources_name_list.append(resource['name'])
+            except:
+                continue
+    else:
+        for resource in config_file[removing_type]:
+            resources_name_list.append(resource['name'])
 
     resources_to_remove = []
     logging.debug('Prompting for selection')
     resources_to_remove = (iterfzf(resources_name_list, multi=True))
     logging.debug('List of resources selected: {resources_to_remove}')
-    if resources_to_remove == None:
+    if resources_to_remove == None or resources_to_remove == "":
         logging.error("No resources to remove selected!")
-        exit()
+        exit(52)
 
     logging.debug(f"{len(config_file[removing_type])} {removing_type} before the removal")
 
@@ -147,11 +172,23 @@ def remove_resource(config_file, removing_type):
     #response = ask_yn("Remove Related Resources?")
     #print(f"Your response = {response}")
 
-    try:
-        logging.debug('Removing resources...')
-        config_file[removing_type] = [item for item in config_file[removing_type] if item['name'] not in resources_to_remove]
-    except KeyError:
-        logging.exception(f"Something went wrong!!")
+    if removing_token:
+        logging.debug(f"Removing token information from the user(s) {resources_to_remove}")
+        for item in config_file[removing_type]:
+            if item['name'] in resources_to_remove:
+                logging.debug(f"removing tokens from user {item['name']}")
+                item['user']['auth-provider']['config'].pop('access-token', None)
+                item['user']['auth-provider']['config'].pop('expires-in', None)
+                item['user']['auth-provider']['config'].pop('expires-on', None)
+                item['user']['auth-provider']['config'].pop('refresh-token', None)
+                logging.debug(f'Token Removed successfully!')
+
+    else:
+        try:
+            logging.debug('Removing resources...')
+            config_file[removing_type] = [item for item in config_file[removing_type] if item['name'] not in resources_to_remove]
+        except KeyError:
+            logging.exception(f"Something went wrong!!")
 
     logging.debug(f"{len(config_file[removing_type])} {removing_type} in the end")
 
@@ -164,7 +201,8 @@ def remove_resource(config_file, removing_type):
         [
             'users', 
             'clusters', 
-            'contexts'
+            'contexts',
+            'token'
         ]
     ), 
     default='contexts'
@@ -216,7 +254,6 @@ def cli(resource, name, kubeconfig, undo, debug):
             logging.debug(f'Name of the resource requested to remove: {name}')
         config_file_after = remove_resource(config_file_before, resource)
         
-
     logging.debug(f"New Config file content: \n{config_file_after}")
     update_file(kubeconfig, config_file_after)
 

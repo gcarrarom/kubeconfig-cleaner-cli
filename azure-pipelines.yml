@@ -51,6 +51,7 @@ steps:
     pip install pytest-cov
     pip install .
     pip install testfixtures
+    pip install mock
   displayName: 'Install dependencies'
 
 - script: |
