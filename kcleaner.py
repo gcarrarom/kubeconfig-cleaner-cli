@@ -70,7 +70,7 @@ def update_file(filename, yamldoc):
             logging.debug("Writing new yaml doc into the config file")
             yaml.dump(yamldoc, stream)
         except yaml.YAMLError as exc:
-            logging.exception("Exception occured while trying to write Yaml file")
+            logging.exception(f"Exception occured while trying to write Yaml file: {exc}")
 
 def get_file(filename):
     logging.debug(f'Trying to retrieve contents of file {filename}')
@@ -128,6 +128,17 @@ def get_backup(backup_path):
 
 
 def remove_resource(config_file, removing_type):
+    if config_file == None:
+        logging.error(f'Config File cannot be "None"!')
+        exit(50)
+    if removing_type == None:
+        logging.error(f'Removing type cannot be "None"!')
+        exit(50)
+
+    if removing_type == "" or config_file == "":
+        logging.error(f'Parameters cannot be empty!')
+        exit(51)
+
     if removing_type == 'token':
         removing_type = 'users'
         removing_token = True
@@ -151,9 +162,9 @@ def remove_resource(config_file, removing_type):
     logging.debug('Prompting for selection')
     resources_to_remove = (iterfzf(resources_name_list, multi=True))
     logging.debug('List of resources selected: {resources_to_remove}')
-    if resources_to_remove == None:
+    if resources_to_remove == None or resources_to_remove == "":
         logging.error("No resources to remove selected!")
-        exit()
+        exit(52)
 
     logging.debug(f"{len(config_file[removing_type])} {removing_type} before the removal")
 
