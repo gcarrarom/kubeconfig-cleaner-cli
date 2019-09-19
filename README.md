@@ -11,7 +11,7 @@
 
 
 # Demo
-I want to clean my kube config file without having to open my config file ever again :)
+I want to clean my Kube config file without having to open my config file ever again :)
 
 <p align="center">
   <img src="https://github.com/gcarrarom/kubeconfig-cleaner-cli/raw/master/render1557878856917.gif">
@@ -23,7 +23,7 @@ I want to clean my kube config file without having to open my config file ever a
 To use this CLI simply type:
 `kcleaner`
 This will prompt you to remove the context by using Fuzzy Search.
-If you want to clean another kube config file, you should use the option `-k` or `--kube-config` with the path for your config file.
+If you want to clean another Kube config file, you should use the option `-k` or `--kube-config` with the path for your config file.
 If you want to remove clusters, you can too! Just call `kcleaner clusters` and voilá!
 What about users? Sure can! `kcleaner users` is here to help!
 To select more than one entry, just press tab. All the selected entries will be removed!
@@ -31,7 +31,9 @@ To select more than one entry, just press tab. All the selected entries will be 
 If you know the name of the config entry you're going to remove, you can always use the `-n` or `--name` option to remove it.
 
 # Installation
-There are plenty of ways of installing this tool. Althought I would always recommend to wait for the full release, feel free to download the beta versions as well.
+There are plenty of ways of installing this tool. Although I would always recommend to wait for the full release, feel free to download the beta versions as well.
+## Requirements
+Python 3.x
 ## PyPI (pip)
 To install using pip, simply run this command:
 
