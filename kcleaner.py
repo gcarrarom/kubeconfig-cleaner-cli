@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import logging
 import click
@@ -6,6 +6,7 @@ import yaml
 from pathlib import Path
 from iterfzf import iterfzf
 import datetime
+from __future__ import print_function
 
 backup_limit = 10
 backup_date_format = '%Y-%m-%d_%H-%M-%S'
@@ -13,7 +14,7 @@ backup_date_format = '%Y-%m-%d_%H-%M-%S'
 def ask_yn(yn_question, default='n'):
     tries = 0
     while True:
-        response = input(f"{yn_question}(y/n)")
+        response = input("%s (y/n)" % (yn_question))
         tries = tries + 1
         if response in  ['y', 'n']:
             break
