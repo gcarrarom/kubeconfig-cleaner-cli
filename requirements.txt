@@ -1,0 +1,7 @@
+testfixtures
+click
+pytest
+mock
+pathlib
+iterfzf
+datetime
