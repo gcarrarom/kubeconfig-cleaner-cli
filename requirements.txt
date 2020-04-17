@@ -4,3 +4,4 @@ pathlib
 iterfzf
 datetime
 PyYAML
+testfixtures
