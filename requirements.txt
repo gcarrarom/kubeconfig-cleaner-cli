@@ -3,4 +3,4 @@ mock
 pathlib
 iterfzf
 datetime
-yaml
+PyYAML
