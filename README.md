@@ -1,5 +1,5 @@
 ![GitHub release](https://img.shields.io/github/release/gcarrarom/kubeconfig-cleaner-cli.svg)
-[![Master Build Status](https://dev.azure.com/FancyWhale/FancyWhale/_apis/build/status/kcleaner%20CI?branchName=master)](https://dev.azure.com/FancyWhale/FancyWhale/_build/latest?definitionId=2&branchName=master)
+![Python application](https://github.com/gcarrarom/kubeconfig-cleaner-cli/workflows/Python%20application/badge.svg?branch=master)
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/fancywhale/fancywhale/2?style=plastic)
 # Table of contents
 - [Table of contents](#table-of-contents)
