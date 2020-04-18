@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     runs-on: ubuntu-latest
 
@@ -35,3 +36,13 @@ jobs:
       run: |
         pip install pytest
         python -m pytest
+        
+  release:
+    if: "!contains(github.event.head_commit.message, 'skip cd')"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Pip Upload
+      uses: onichandame/pip-upload-action@0.0.1
+      with:
+        username: gui.martins
+        password: PYPI_PASS
