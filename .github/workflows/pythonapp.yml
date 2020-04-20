@@ -38,11 +38,17 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip install pytest
-        python -m pytest
+        pip install pytest pytest-cov
+        python -m pytest --cov=./
+    - name: Upload Code coverage
+      run: |
+        pip install codecov
+        codecov --token=$CODECOV_TOKEN
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         
   release:
-    if: "!contains(github.event.head_commit.message, 'skip ci') && github.event_name == 'push' && github.ref == 'refs/heads/master'"
+    if: "!contains(github.event.head_commit.message, 'skip ci') && github.event_name == 'push' && github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, 'skip cd')"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
