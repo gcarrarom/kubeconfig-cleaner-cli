@@ -1,6 +1,5 @@
 ![GitHub release](https://img.shields.io/github/release/gcarrarom/kubeconfig-cleaner-cli.svg)
 ![Python application](https://github.com/gcarrarom/kubeconfig-cleaner-cli/workflows/Python%20application/badge.svg?branch=master)
-![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/fancywhale/fancywhale/2?style=plastic)
 # Table of contents
 - [Table of contents](#table-of-contents)
 - [Demo](#demo)
