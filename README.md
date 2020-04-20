@@ -1,5 +1,6 @@
 ![GitHub release](https://img.shields.io/github/release/gcarrarom/kubeconfig-cleaner-cli.svg)
-[![Master Build Status](https://dev.azure.com/FancyWhale/FancyWhale/_apis/build/status/kcleaner%20CI?branchName=master)](https://dev.azure.com/FancyWhale/FancyWhale/_build/latest?definitionId=2&branchName=master)
+![Python application](https://github.com/gcarrarom/kubeconfig-cleaner-cli/workflows/Python%20application/badge.svg?branch=master)
+![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/fancywhale/fancywhale/2?style=plastic)
 # Table of contents
 - [Table of contents](#table-of-contents)
 - [Demo](#demo)
@@ -30,6 +31,20 @@ To select more than one entry, just press tab. All the selected entries will be 
 
 If you know the name of the config entry you're going to remove, you can always use the `-n` or `--name` option to remove it.
 
+Here's the output of the help command `kcleaner --help`:
+```
+Usage: kcleaner.py [OPTIONS] [[users|clusters|contexts|token]]
+
+  A little CLI tool to help keeping Config Files clean :)
+
+Options:
+  -k, --kubeconfig TEXT  path to the config file to clean
+  -n, --name TEXT        Name of the entry to remove
+  -u, --undo             Use this to roll back latest changes
+  -d, --debug            Use this to see debug level messages
+  --help                 Show this message and exit.
+```
+
 # Installation
 There are plenty of ways of installing this tool. Although I would always recommend to wait for the full release, feel free to download the beta versions as well.
 ## Requirements
@@ -50,6 +65,6 @@ This is the first distribution place for the tool, latest version might not be f
   - [x] Automated release to PyPI
   - [ ] Automated release to Brew
   - [ ] Automated release to Chocolatey
-- [ ] Add more tests, Code coverage is laughable now ;)
+- [x] Add more tests, Code coverage is laughable now ;)
 - [x] Add undo flag... Life happens ¯\\\_(ツ)\_/¯
 - [x] ~~Make it easier to add changes and modules to the tool - Changed to use command group instead~~ Not worth it.

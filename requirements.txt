@@ -1,0 +1,7 @@
+click
+mock
+pathlib
+iterfzf
+datetime
+PyYAML
+testfixtures
