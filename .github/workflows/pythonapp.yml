@@ -64,7 +64,7 @@ jobs:
     - name: Github Release
       uses: elgohr/Github-Release-Action@v3.1
       with:
-        release: ${{ env.VERSION }}
+        release: "v${{ env.VERSION }}"
     - name: Pip Upload
       uses: onichandame/pip-upload-action@0.0.1
       with:
