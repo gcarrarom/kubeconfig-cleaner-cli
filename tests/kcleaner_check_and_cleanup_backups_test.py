@@ -1,3 +1,4 @@
+from __future__ import print_function
 from  kcleaner import check_and_cleanup_backups, backup_limit
 from testfixtures import log_capture
 import click
