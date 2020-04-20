@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 from __future__ import print_function
 import os
 import logging
@@ -14,7 +14,7 @@ backup_date_format = '%Y-%m-%d_%H-%M-%S'
 def ask_yn(yn_question, default='n'):
     tries = 0
     while True:
-        response = input(f"{yn_question}(y/n)")
+        response = input("%s (y/n)" % (yn_question))
         tries = tries + 1
         if response in  ['y', 'n']:
             break
