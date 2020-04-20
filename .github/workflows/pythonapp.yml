@@ -45,4 +45,4 @@ jobs:
       uses: onichandame/pip-upload-action@0.0.1
       with:
         username: gui.martins
-        password: PYPI_PASS
+        password: ${{PYPI_PASS}}
