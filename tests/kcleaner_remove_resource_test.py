@@ -1,3 +1,4 @@
+from __future__ import print_function
 from  kcleaner import remove_resource, get_file
 from testfixtures import log_capture
 import click
