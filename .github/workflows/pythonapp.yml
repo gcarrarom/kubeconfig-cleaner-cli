@@ -60,11 +60,11 @@ jobs:
           exit 100
         fi
         echo "Version to be used: $ApplicationVersion"
-        echo "::set-env name=VERSION::$ApplicationVersion"
+        echo "::set-env name=RELEASE_VERSION::$ApplicationVersion"
     - name: Github Release
       uses: elgohr/Github-Release-Action@v3.1
       with:
-        release: "v${{ env.VERSION }}"
+        release: "v${{ env.RELEASE_VERSION }}"
     - name: Pip Upload
       uses: onichandame/pip-upload-action@0.0.1
       with:
