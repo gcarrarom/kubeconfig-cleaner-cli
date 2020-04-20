@@ -64,6 +64,8 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.RELEASE_VERSION }}
         release_name: Release v${{ env.RELEASE_VERSION }}
