@@ -7,7 +7,6 @@ import yaml
 from pathlib import Path
 from iterfzf import iterfzf
 import datetime
-from __future__ import print_function
 
 backup_limit = 10
 backup_date_format = '%Y-%m-%d_%H-%M-%S'
