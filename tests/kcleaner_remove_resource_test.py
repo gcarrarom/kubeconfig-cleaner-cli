@@ -1,11 +1,11 @@
 from __future__ import print_function
 from  kcleaner import remove_resource, get_file
+import kcleaner
 from testfixtures import log_capture
 import click
 from click.testing import CliRunner
 import pytest
 import yaml
-from mock import patch
 
 runner = CliRunner()
 sample_yaml_no_token = """
@@ -94,9 +94,8 @@ def test_config_file_empty(capture):
         ('root', 'ERROR', 'Parameters cannot be empty!'),
     )
 
-""" @log_capture()
-@patch('kcleaner.iterfzf')
-def test_remove_token_not_available(capture, test_patch):
+@log_capture()
+def test_remove_token_not_available(capture, monkeypatch):
     with runner.isolated_filesystem():
 
         with open(f'./SampleConfigFile', 'w') as f:
@@ -104,7 +103,7 @@ def test_remove_token_not_available(capture, test_patch):
 
         config_file = get_file("./SampleConfigFile")
 
-        test_patch.return_value = ""
+        monkeypatch.setattr("kcleaner.iterfzf", lambda listOfResources,multi: "")
 
         with pytest.raises(SystemExit) as pytest_wrapped_e:
             new_config = remove_resource(config_file, "token")
@@ -112,11 +111,11 @@ def test_remove_token_not_available(capture, test_patch):
         assert pytest_wrapped_e.value.code == 52
         capture.check_present(
             ('root', 'ERROR', 'No resources to remove selected!'),
-        ) """
+        ) 
 
-""" @log_capture()
-@patch('kcleaner.iterfzf')
-def test_remove_token(test_patch, capture):
+
+@log_capture()
+def test_remove_token(capture, monkeypatch):
     name_to_remove = "SuperCoolUserName1"
     with runner.isolated_filesystem():
 
@@ -128,7 +127,7 @@ def test_remove_token(test_patch, capture):
         config_file = get_file("./SampleConfigFile")
         config_to_test = get_file("./SampleConfigFileToTest")
 
-        test_patch.return_value = f"{name_to_remove}"
+        monkeypatch.setattr("kcleaner.iterfzf", lambda listOfResources,multi: f"{name_to_remove}")
 
         new_config = remove_resource(config_file, "token")
         
@@ -137,4 +136,4 @@ def test_remove_token(test_patch, capture):
             ('root', 'DEBUG', f'Removing token information from the user(s) {name_to_remove}'),
             ('root', 'DEBUG', f'removing tokens from user {name_to_remove}'),
             ('root', 'DEBUG', 'Token Removed successfully!'),
-        ) """
+        )
