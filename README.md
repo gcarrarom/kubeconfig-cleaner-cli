@@ -1,6 +1,6 @@
 ![GitHub release](https://img.shields.io/github/release/gcarrarom/kubeconfig-cleaner-cli.svg)
 ![Python application](https://github.com/gcarrarom/kubeconfig-cleaner-cli/workflows/Python%20application/badge.svg?branch=master)
-![Codecov](https://img.shields.io/codecov/c/gh/gcarrarom/kubeconfig-cleaner-cli)
+[![codecov](https://codecov.io/gh/gcarrarom/kubeconfig-cleaner-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/gcarrarom/kubeconfig-cleaner-cli)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/kcleaner)
 # Table of contents
 - [Table of contents](#table-of-contents)
