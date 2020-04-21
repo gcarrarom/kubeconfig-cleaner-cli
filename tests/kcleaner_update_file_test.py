@@ -15,6 +15,10 @@ something:
   - item2: test
     something: test
 """
+sample_broken_yaml = """
+text foobar
+number: 2
+"""
 
 @log_capture()
 def test_none_parameters(capture):
@@ -94,6 +98,22 @@ def test_existant_file_yaml_content(capture):
 
         assert sample_yaml in result
         capture.check_present(
+            ('root', 'DEBUG', 'Writing new yaml doc into the config file')
+        )
+
+@log_capture()
+def test_existant_file_dict_content(capture):
+    with runner.isolated_filesystem():
+        with open('./config', 'w') as f:
+            f.write('lololol')
+        dictyaml = yaml.safe_load(sample_yaml)
+        update_file("./config", dictyaml)
+
+        with open('./config', 'r') as f:
+            result = yaml.safe_load(f)
+
+        capture.check_present(
+            ('root', 'DEBUG', f'This is a dict yaml doc object. Should be fine to convert as yaml. Content:\n{dictyaml}'),
             ('root', 'DEBUG', 'Writing new yaml doc into the config file')
         )
 
