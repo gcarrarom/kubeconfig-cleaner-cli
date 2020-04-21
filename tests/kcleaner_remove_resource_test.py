@@ -6,7 +6,6 @@ import click
 from click.testing import CliRunner
 import pytest
 import yaml
-from mock import patch
 
 runner = CliRunner()
 sample_yaml_no_token = """
