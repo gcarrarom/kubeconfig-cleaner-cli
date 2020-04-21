@@ -45,7 +45,6 @@ def check_and_cleanup_backups(filename):
         logging.debug(f'We are bellow the backup limit, nothing to do here.')
 
 def update_file(filename, yamldoc):
-    file_exists(filename)
     if not file_exists(filename) and not "bak" in filename:
         logging.error("Cannot work with an empty file!, please check the path of your config file.")
     if "bak" in filename:
