@@ -7,9 +7,6 @@
 - [Demo](#demo)
 - [Usage](#usage)
 - [Installation](#installation)
-  - [PyPI (pip)](#pypi-pip)
-  - [PyPI Test](#pypi-test)
-- [TO-DO](#to-do)
 
 
 # Demo
