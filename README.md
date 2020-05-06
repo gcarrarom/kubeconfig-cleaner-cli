@@ -47,25 +47,10 @@ Options:
 ```
 
 # Installation
-There are plenty of ways of installing this tool. Although I would always recommend to wait for the full release, feel free to download the beta versions as well.
-## Requirements
-Python 3.x
-## PyPI (pip)
+
 To install using pip, simply run this command:
 
 `pip install kcleaner`
-## PyPI Test
-This is the first distribution place for the tool, latest version might not be fully operational
 
-`pip install -i https://test.pypi.org/simple/ kcleaner`
-
-# TO-DO
-
-- [ ] Automated publishing to PyPI, Brew and Chocolatey
-  - [x] Automated release to PyPI Test
-  - [x] Automated release to PyPI
-  - [ ] Automated release to Brew
-  - [ ] Automated release to Chocolatey
-- [x] Add more tests, Code coverage is laughable now ;)
-- [x] Add undo flag... Life happens ¯\\\_(ツ)\_/¯
-- [x] ~~Make it easier to add changes and modules to the tool - Changed to use command group instead~~ Not worth it.
+## Requirements
+Python 3.x
